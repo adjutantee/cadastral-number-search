@@ -1,26 +1,32 @@
 <div class="et_pb_module et_pb_search et_pb_search_0  et_pb_text_align_left et_pb_bg_layout_light">
-    <form role="find" method="get" class="et_pb_searchform" action="/base/">
-        <div>
-            <label class="screen-reader-text" for="s">Поиск:</label>
-            <input type="text" name="kadastr" id="kadastr" placeholder="05:05:000000:000000" class="et_pb_s">
-            <input type="hidden" name="kadastrAction" value="find">
-            <input type="submit" value="Поиск" class="et_pb_searchsubmit" style="">
-        </div>
-    </form>
-</div>
+      <form role="find" method="get" class="et_pb_searchform" action="/base/">
+					<div>
+						<label class="screen-reader-text" for="s">Поиск:</label>
+						<input type="text" name="kadastr" id="kadastr" data-mask="99:99:9999999:9999999" placeholder="  :  :       :   " required="true" type="text" class="et_pb_s">
+						<input type="hidden" name="kadastrAction" value="find">
+						<input type="submit" value="Поиск" class="et_pb_searchsubmit" style="">
+					</div>
+				</form>
+			</div>
 <script>
     var $j = jQuery.noConflict();
+    $j("#kadastr").mask("99:99:999999:9999999",{autoclear: false});
     $j(".et_pb_searchform").submit(function () {
         $j.ajax({
             url: '/base/',
             method: 'get',
             dataType: 'json',
-            data: {kadastr: $j("#kadastr").val()},
+            data: {kadastr: $j("#kadastr").val().replace(/[^0-9:]/g, '')},
             success: function(data){
                 console.log(data.status);
                 if (data.status == 'BAD'){
-                    console.log(data.data)
+                    console.log(data.data.error)
                     $j('#resultKadastr').empty();
+                    $j('#resultHead').show();
+                    $j('#resultKadastr').show();
+                    $j('#resultKadastr').append(
+                        "<p><b>ОШИБКА</b>: " + data.data.error + "</p>"
+                    );
                 }
                 if (data.status == 'OK'){
                     $j('#resultKadastr').show();
@@ -29,12 +35,12 @@
                     $j('#resultKadastr').append(
                         "<p>Кадастровый квартал: " + data.data.kvartal + "</p>" +
                         "<p>Кадастровый номер: " + data.data.kadastr + "</p>" +
+                        "<p><mark>Проектная кадастровая стоимость: " + data.data.price + " руб.</mark></p>" +
                         "<p>Адрес: " + data.data.address + "</p>" +
-                        "<p>Площадь: " + data.data.square + "</p>" +
-                        "<p>Проектная Кадастровая Стоимость: " + data.data.price + "</p>" +
-                        '<p>Вид объекта недвижимости ЗУ: ' + data.data.type + "</p>" +
+                        "<p>Площадь: " + Number(data.data.square).toFixed(2) + "</p>" +
+                        '<p>Вид объекта недвижимости: ' + data.data.type + "</p>" +
                         "<p>Категория земель: " + data.data.category  + "</p>"
-                    );
+                        );
                     console.log(data.data.id)
                 }
             }
