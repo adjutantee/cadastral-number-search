@@ -1,16 +1,21 @@
+<style>
+.kadastr {
+    text-decoration: none;
+}
+</style>
 <div class="et_pb_module et_pb_search et_pb_search_0  et_pb_text_align_left et_pb_bg_layout_light">
-      <form role="find" method="get" class="et_pb_searchform" action="/base/">
-					<div>
-						<label class="screen-reader-text" for="s">Поиск:</label>
-						<input type="text" name="kadastr" id="kadastr" data-mask="99:99:9999999:9999999" placeholder="  :  :       :   " required="true" type="text" class="et_pb_s">
-						<input type="hidden" name="kadastrAction" value="find">
-						<input type="submit" value="Поиск" class="et_pb_searchsubmit" style="">
-					</div>
-				</form>
-			</div>
+    <form role="find" method="get" class="et_pb_searchform" action="/base/">
+            <div>
+                <label class="screen-reader-text" for="s">Поиск:</label>
+                <input type="text" name="kadastr" id="kadastr" data-mask="99:99:9999999:9999999" placeholder="  :  :       :   " required="true" type="text" class="et_pb_s">
+                <input type="hidden" name="kadastrAction" value="find">
+                <input type="submit" value="Поиск" class="et_pb_searchsubmit" style="">
+            </div>
+        </form>
+    </div>
 <script>
     var $j = jQuery.noConflict();
-    $j("#kadastr").mask("99:99:999999:9999999",{autoclear: false});
+    $j("#kadastr").mask("99:99:999999:9999999",{placeholder:" ",autoclear: false});
     $j(".et_pb_searchform").submit(function () {
         $j.ajax({
             url: '/base/',
@@ -47,4 +52,4 @@
         });
         return false;
     });
-</script>
+</script>  
